@@ -13,5 +13,11 @@ UCLASS()
 class AUTOGARFIELD_API AJon : public APaperCharacter
 {
 	GENERATED_BODY()
+
+	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaSeconds) override;
+
+	void OnControlPointReached();
 	
 };
