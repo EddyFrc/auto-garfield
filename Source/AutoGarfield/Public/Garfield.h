@@ -13,5 +13,8 @@ UCLASS()
 class AUTOGARFIELD_API AGarfield : public APaperCharacter
 {
 	GENERATED_BODY()
-	
+
+	virtual void Tick(float DeltaSeconds) override;
+
+	virtual void BeginPlay() override;
 };

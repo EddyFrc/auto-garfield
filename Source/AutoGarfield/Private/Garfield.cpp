@@ -3,3 +3,15 @@
 
 #include "Garfield.h"
 
+#include "Components/CapsuleComponent.h"
+#include "GameFramework/PawnMovementComponent.h"
+
+void AGarfield::Tick(float DeltaSeconds)
+{
+	
+}
+
+void AGarfield::BeginPlay()
+{
+	Super::BeginPlay();
+}
