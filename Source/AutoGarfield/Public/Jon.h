@@ -15,13 +15,13 @@ class AUTOGARFIELD_API AJon : public APaperCharacter
 {
 	GENERATED_BODY()
 
+	UPROPERTY(Category = Pawn, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	UPawnMovementComponent* FloatingMovementComponent;
+
 public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
 	TSubclassOf<ALasagna> LasagnaToSpawn;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Variables")
-	double Speed = 3000;
 
 	FVector CurrentTarget;
 	FVector CurrentForce;
@@ -31,9 +31,7 @@ protected:
 	
 	void OnControlPointReached();
 
-	FVector Seek(const FVector& Target);
-
 public:
-	virtual void Tick(float DeltaSeconds) override;
+	virtual void Tick(const float DeltaSeconds) override;
 	AJon();
 };

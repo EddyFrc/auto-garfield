@@ -3,17 +3,20 @@
 
 #include "Jon.h"
 
+#include "AutoGarfield/PhysicsUtils.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/FloatingPawnMovement.h"
+#include "GameFramework/PawnMovementComponent.h"
 
-void AJon::Tick(float DeltaSeconds)
+void AJon::Tick(const float DeltaSeconds)
 {
     Super::Tick(DeltaSeconds);
     // Call Seek
-    CurrentForce = Seek(CurrentTarget);
+	CurrentForce = PhysicsUtils::Seek(this, CurrentTarget, FloatingMovementComponent);
     // Apply force using the resulting vector
-    this->GetCapsuleComponent()->AddForce(CurrentForce, NAME_None, true);
+	GetMovementComponent()->AddInputVector(CurrentForce);
     // Check if near the defined target
-    if (FMath::Abs(this->GetActorLocation().Y - CurrentTarget.Y) < 5)
+    if (FMath::Abs(this->GetActorLocation().Y - CurrentTarget.Y) < 50)
     {
     	UE_LOGFMT(LogTemp, Display, "Control Point Reached with distance = `{Distance}`", this->GetActorLocation().Y - CurrentTarget.Y);
         // If near the target, call OnControlPointReached
@@ -28,7 +31,7 @@ void AJon::OnControlPointReached()
 	// Generate new lasagna for Garfield to eat
 	GetWorld()->SpawnActor<ALasagna>(LasagnaToSpawn, this->GetActorLocation(), this->GetActorRotation());
 	// Create new random point
-	CurrentTarget = FVector(this->GetActorLocation().X, FMath::RandRange(-300, 300), this->GetActorLocation().Z);
+	CurrentTarget = FVector(this->GetActorLocation().X, FMath::RandRange(-550, 550), this->GetActorLocation().Z);
 }
 
 
@@ -38,22 +41,13 @@ void AJon::BeginPlay()
 	Super::BeginPlay();
 
 	OnControlPointReached();
-
-
-}
-
-FVector AJon::Seek(const FVector& Target)
-{
-	FVector Desired = Target - this->GetActorLocation();
-	Desired.Normalize();
-	Desired *= Speed;
-	FVector Steering = Desired - this->GetVelocity();
-	Steering = Steering.GetClampedToMaxSize(Speed);
-	return Steering;
+	
 }
 
 AJon::AJon()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
+
+	FloatingMovementComponent = CreateDefaultSubobject<UPawnMovementComponent, UFloatingPawnMovement>(FName("FloatingMovementComponent"));
 }
