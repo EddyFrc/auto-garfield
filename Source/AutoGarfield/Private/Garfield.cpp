@@ -7,6 +7,8 @@
 #include "Engine/World.h"
 #include "GameFramework/FloatingPawnMovement.h"
 #include "GameFramework/PawnMovementComponent.h"
+#include "PaperFlipbookComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 void AGarfield::Tick(const float DeltaSeconds)
@@ -19,7 +21,14 @@ void AGarfield::Tick(const float DeltaSeconds)
 		SeekForce = PhysicsUtils::Seek(this, CurrentNearestLasagna->GetActorLocation(), FloatingMovementComponent);
 		SeekForce.Z = 0.0f;
 		GetMovementComponent()->AddInputVector(SeekForce);
-
+	}
+	
+	if (FloatingMovementComponent->Velocity.Y > 0)
+	{
+		GetCapsuleComponent()->SetRelativeScale3D(FVector(1, 1, 1));
+	} else if (FloatingMovementComponent->Velocity.Y < 0)
+	{
+		GetCapsuleComponent()->SetRelativeScale3D(FVector(1, -1, 1));
 	}
 }
 
@@ -31,10 +40,11 @@ void AGarfield::BeginPlay()
 
 AGarfield::AGarfield() : SeekForce()
 {
-	SeekForce = FVector(0, 0, 0);
 	PrimaryActorTick.bCanEverTick = true;
 	
 	FloatingMovementComponent = CreateDefaultSubobject<UPawnMovementComponent, UFloatingPawnMovement>(FName("FloatingMovementComponent"));
+	ALasagna::TotalNumberSpawned = 0;
+	ALasagna::NumberEaten = 0;
 }
 
 ALasagna* AGarfield::GetNearestLasagna() const

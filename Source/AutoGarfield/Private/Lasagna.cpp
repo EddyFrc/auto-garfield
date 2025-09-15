@@ -5,6 +5,9 @@
 
 #include "Garfield.h"
 
+int ALasagna::TotalNumberSpawned;
+int ALasagna::NumberEaten;
+
 // Sets default values
 ALasagna::ALasagna()
 {
@@ -16,6 +19,9 @@ ALasagna::ALasagna()
 
 	SpriteComponent = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("Sprite"));
 	SpriteComponent->SetupAttachment(BoxComponent);
+
+	TotalNumberSpawned += 1;
+
 }
 
 void ALasagna::Tick(float DeltaSeconds)
@@ -24,6 +30,8 @@ void ALasagna::Tick(float DeltaSeconds)
 	if (this->GetActorLocation().Z < -10000)
 	{
 		this->Destroy();
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Format(TEXT("Number eaten = {0}; Total number = {1}; Percentage = {2}%"), { NumberEaten, TotalNumberSpawned, double(NumberEaten) / double(TotalNumberSpawned) * 100 }));
+
 	}
 }
 
@@ -43,6 +51,10 @@ void ALasagna::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* 
 	if (Cast<AGarfield>(OtherActor))
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Lasagna Destroy");
+		NumberEaten += 1;
 		this->Destroy();
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Format(TEXT("Number eaten = {0}; Total number = {1}; Percentage = {2}%"), { NumberEaten, TotalNumberSpawned, double(NumberEaten) / double(TotalNumberSpawned) * 100 }));
+
+
 	}
 }

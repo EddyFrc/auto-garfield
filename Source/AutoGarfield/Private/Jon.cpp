@@ -22,7 +22,14 @@ void AJon::Tick(const float DeltaSeconds)
         // If near the target, call OnControlPointReached
         OnControlPointReached();
     }
-
+	
+	if (FloatingMovementComponent->Velocity.Y > 0)
+	{
+		GetCapsuleComponent()->SetRelativeScale3D(FVector(1, 1, 1));
+	} else if (FloatingMovementComponent->Velocity.Y < 0)
+	{
+		GetCapsuleComponent()->SetRelativeScale3D(FVector(1, -1, 1));
+	}
 }
 
 void AJon::OnControlPointReached()

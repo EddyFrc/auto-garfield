@@ -20,6 +20,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	UBoxComponent* BoxComponent;
+
+	static int NumberEaten;
+	static int TotalNumberSpawned;
 	
 	// Sets default values for this actor's properties
 	ALasagna();
