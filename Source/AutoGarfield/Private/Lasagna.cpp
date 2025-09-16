@@ -30,8 +30,7 @@ void ALasagna::Tick(float DeltaSeconds)
 	if (this->GetActorLocation().Z < -10000)
 	{
 		this->Destroy();
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Format(TEXT("Number eaten = {0}; Total number = {1}; Percentage = {2}%"), { NumberEaten, TotalNumberSpawned, double(NumberEaten) / double(TotalNumberSpawned) * 100 }));
-
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Format(TEXT("Number eaten = {0}; Total number = {1}; Percentage = {2}%"), { NumberEaten, TotalNumberSpawned, double(NumberEaten) / double(TotalNumberSpawned) * 100 }));
 	}
 }
 
@@ -53,8 +52,13 @@ void ALasagna::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* 
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Lasagna Destroy");
 		NumberEaten += 1;
 		this->Destroy();
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Format(TEXT("Number eaten = {0}; Total number = {1}; Percentage = {2}%"), { NumberEaten, TotalNumberSpawned, double(NumberEaten) / double(TotalNumberSpawned) * 100 }));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Format(TEXT("Number eaten = {0}; Total number = {1}; Percentage = {2}%"), { NumberEaten, TotalNumberSpawned, double(NumberEaten) / double(TotalNumberSpawned) * 100 }));
 
 
 	}
+}
+
+FString ALasagna::GetDisplayCatchPercentage()
+{
+	return FString::Format(TEXT("{0}%"), { FMath::RoundToInt32(double(NumberEaten) / double(TotalNumberSpawned) * 100) });
 }
